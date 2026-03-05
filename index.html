@@ -36,10 +36,12 @@
 
         /* DATE */
         .date-container {
-            text-align: center;
             margin-top: 20px;
             font-size: 22px;
+            text-align: center;
         }
+
+
 
         /* GRID */
         .container {
@@ -100,28 +102,7 @@
             font-weight: bold;
         }
 
-        .hadith-container {
-            width: 70%;
-            margin: 40px auto;
-            padding: 25px;
-            background: #f3f3f3;
-            border-radius: 20px;
-            text-align: center;
-        }
 
-        .hadith-container h2 {
-            color: #0a7f3f;
-            margin-bottom: 15px;
-            font-size: 38px;
-
-        }
-
-        #hadithText {
-            font-size: 48px;
-            line-height: 1.2;
-            font-weight: lighter;
-
-        }
 
 
 
@@ -165,12 +146,64 @@
             }
         }
 
+        #hadithText {
+            font-size: 48px;
+            line-height: 1.2;
+            font-weight: lighter;
+
+        }
+
         #hadithSource {
             color: #0a7f3f;
             font-size: 32px;
             margin-left: 20px;
             white-space: nowrap;
             /* Quelle bleibt neben Text */
+        }
+
+        .bottom-section {
+            width: 90%;
+            margin: 40px auto;
+            display: flex;
+            gap: 30px;
+        }
+
+        /* Beide Boxen gleich groß */
+        .info-box,
+        .hadith-container {
+            flex: 1;
+            padding: 25px;
+            background: #f3f3f3;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Titel Stil */
+        .info-box {
+            font-size: 28px;
+       
+            color: #000000;
+            text-align: center;
+        }
+
+        .hadith-container h2 {
+            color: #0a7f3f;
+            margin-bottom: 15px;
+            font-size: 32px;
+        }
+
+        .info-box h2 {
+            color: #0a7f3f;
+            margin-bottom: 15px;
+            font-size: 32px;
+        }
+
+        /* Responsive für Handy */
+        @media screen and (max-width: 900px) {
+            .bottom-section {
+                flex-direction: column;
+            }
         }
 
         /* FOOTER */
@@ -204,12 +237,24 @@
 
     <div class="countdown" id="countdown"></div>
 
+
+
     <div class="container" id="times"></div>
 
-    <div class="hadith-container">
-        <h2>Hadis-i Şerif</h2>
-        <p id="hadithText"></p>
-        <span id="hadithSource"></span>
+    <div class="bottom-section">
+
+        <div class="info-box">
+            <h2>Bilgilendirme:</h2>
+            Sabah namazı, İmsak vaktinden 30 dakika sonra kılınır.
+            <br>
+            Das Morgengebet wird 30 Minuten nach Imsak verrichtet.
+        </div>
+
+        <div class="hadith-container">
+            <h2>Hadis-i Şerif</h2>
+            <p id="hadithText"></p>
+            <span id="hadithSource"></span>
+        </div>
 
     </div>
 
@@ -261,8 +306,9 @@
 
                 // Ziel-Datum laden
                 const response = await fetch(
-                    `https://api.aladhan.com/v1/timings/${day}-${month}-${year}?latitude=48.2266&longitude=14.2346&method=13&tune=2,0,0,0,0,0,1,0,0`
+                    `https://api.aladhan.com/v1/timings/${day}-${month}-${year}?latitude=48.2266&longitude=14.2346&method=13`
                 );
+
 
                 const data = await response.json();
                 const timings = data.data.timings;
@@ -270,16 +316,30 @@
                 document.getElementById("miladi").innerText =
                     "Miladi: " + data.data.date.readable;
 
+                const hijri = data.data.date.hijri;
+
                 document.getElementById("hicri").innerText =
-                    "Hicri: " + data.data.date.hijri.date;
+                    "Hicri: " +
+                    hijri.day + " " +
+                    hijri.month.en + " " +
+                    hijri.year;
+
+                function addMinutes(timeString, minutes) {
+                    const [hour, minute] = timeString.split(":").map(Number);
+                    const date = new Date();
+                    date.setHours(hour, minute + minutes, 0);
+
+                    return date.getHours().toString().padStart(2, "0") + ":" +
+                        date.getMinutes().toString().padStart(2, "0");
+                }
 
                 const prayers = [
-                    { name: "İmsak", time: timings.Fajr },
+                    { name: "İmsak", time: addMinutes(timings.Fajr, 1) },        // +1
                     { name: "Güneş", time: timings.Sunrise },
                     { name: "Öğle", time: timings.Dhuhr },
                     { name: "İkindi", time: timings.Asr },
-                    { name: "Akşam", time: timings.Maghrib },
-                    { name: "Yatsı", time: timings.Isha }
+                    { name: "Akşam", time: addMinutes(timings.Maghrib, -1) },    // -1
+                    { name: "Yatsı", time: addMinutes(timings.Isha, -8) }        // -8
                 ];
 
                 const currentTime = new Date();
@@ -305,19 +365,11 @@
 
                 prayers.forEach((prayer, index) => {
 
-                    if (index === nextIndex) {
-                        html = `
-                       <div class="card next">
-                       <div>${prayer.name}</div>
-                      <div class="time">${prayer.time}</div>
-                            </div>` + html;
-                    } else {
-                        html += `
-                       <div class="card">
-                      <div>${prayer.name}</div>
-                      <div class="time">${prayer.time}</div>
-                    </div>`;
-                    }
+                    html += `
+                        <div class="card ${index === nextIndex ? 'next' : ''}">
+                            <div>${prayer.name}</div>
+                            <div class="time">${prayer.time}</div>
+                        </div>`;
                 });
 
                 document.getElementById("times").innerHTML = html;
