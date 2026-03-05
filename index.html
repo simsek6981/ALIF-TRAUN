@@ -13,6 +13,7 @@
             background: white;
             color: black;
             overflow: hidden;
+
         }
 
         /* HEADER */
@@ -182,7 +183,7 @@
         /* Titel Stil */
         .info-box {
             font-size: 28px;
-       
+
             color: #000000;
             text-align: center;
         }
@@ -197,6 +198,29 @@
             color: #0a7f3f;
             margin-bottom: 15px;
             font-size: 32px;
+        }
+
+        .vakti-start {
+            animation: fadeInPulse 1.5s ease-in-out infinite;
+            color: #0a7f3f;
+            font-weight: bold;
+        }
+
+        @keyframes fadeInPulse {
+            0% {
+                opacity: 0.4;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+
+            100% {
+                opacity: 0.4;
+                transform: scale(1);
+            }
         }
 
         /* Responsive für Handy */
@@ -342,6 +366,7 @@
                     { name: "Yatsı", time: addMinutes(timings.Isha, -8) }        // -8
                 ];
 
+
                 const currentTime = new Date();
                 let nextIndex = -1;
 
@@ -358,6 +383,16 @@
                 });
 
                 if (nextIndex === -1) {
+
+                    const [hour, minute] = prayers[0].time.split(":");
+
+                    const tomorrow = new Date();
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+                    tomorrow.setHours(hour, minute, 0);
+
+                    nextPrayerTime = tomorrow;
+                    nextPrayerName = prayers[0].name;
+
                     nextIndex = 0;
                 }
 
@@ -388,21 +423,41 @@
             const diff = nextPrayerTime - now;
 
             if (diff <= 0) {
-                document.getElementById("countdown").innerText = nextPrayerName + " vakti başladı";
+
+                const countdown = document.getElementById("countdown");
+
+                countdown.innerText = nextPrayerName + " vakti başladı";
+                countdown.classList.add("vakti-start");
+
+                // Neue Zeiten laden nach 10 Sekunden
+                setTimeout(loadPrayerTimes, 10000);
+
                 return;
+            } else {
+                document.getElementById("countdown").classList.remove("vakti-start");
             }
 
             let hours = Math.floor(diff / (1000 * 60 * 60));
             let minutes = Math.floor((diff / (1000 * 60)) % 60);
             let seconds = Math.floor((diff / 1000) % 60);
 
-            // Führende Null hinzufügen
             hours = hours.toString().padStart(2, '0');
             minutes = minutes.toString().padStart(2, '0');
             seconds = seconds.toString().padStart(2, '0');
 
+            // Text automatisch ändern
+            let displayName = nextPrayerName;
+
+            if (nextPrayerName === "İmsak") {
+                displayName = "Sahur ve İmsak";
+            }
+
+            if (nextPrayerName === "Akşam") {
+                displayName = "İftar ve Akşam";
+            }
+
             document.getElementById("countdown").innerText =
-                nextPrayerName + " için kalan süre: " +
+                displayName + " için kalan süre: " +
                 hours + ":" + minutes + ":" + seconds;
         }
         const hadithList = [
@@ -486,10 +541,9 @@
         }
 
 
-        loadPrayerTimes();
-        loadPrayerTimes().then(() => {  // sicherstellen, dass die Gebetszeiten geladen sind
-            updateCountdown();          // einmal sofort anzeigen
-            setInterval(updateCountdown, 1000); // dann jede Sekunde aktualisieren
+        loadPrayerTimes().then(() => {
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
         });
         setInterval(updateClock, 1000);
         updateClock();
