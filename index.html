@@ -184,7 +184,7 @@
             margin-top: 40px;
         }
 
-      img {
+        img {
             object-fit: contain;
         }
     </style>
@@ -433,13 +433,15 @@
                 hours + ":" + minutes + ":" + seconds;
         }
 
+
+        loadPrayerTimes();
+        loadPrayerTimes().then(() => {  // sicherstellen, dass die Gebetszeiten geladen sind
+            updateCountdown();          // einmal sofort anzeigen
+            setInterval(updateCountdown, 1000); // dann jede Sekunde aktualisieren
+        });
         setInterval(updateClock, 1000);
         updateClock();
         loadDailyHadith();
-        loadPrayerTimes();
-        setInterval(updateCountdown, 1000);
-
-
     </script>
 
 </body>
