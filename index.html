@@ -176,7 +176,7 @@
         /* FOOTER */
         .footer {
             position: absolute;
-            bottom: 15px;
+            bottom: 0;
             width: 100%;
             text-align: center;
             font-size: clamp(14px, 2vw, 18px);
@@ -337,9 +337,14 @@
                 return;
             }
 
-            const hours = Math.floor(diff / (1000 * 60 * 60));
-            const minutes = Math.floor((diff / (1000 * 60)) % 60);
-            const seconds = Math.floor((diff / 1000) % 60);
+            let hours = Math.floor(diff / (1000 * 60 * 60));
+            let minutes = Math.floor((diff / (1000 * 60)) % 60);
+            let seconds = Math.floor((diff / 1000) % 60);
+
+            // Führende Null hinzufügen
+            hours = hours.toString().padStart(2, '0');
+            minutes = minutes.toString().padStart(2, '0');
+            seconds = seconds.toString().padStart(2, '0');
 
             document.getElementById("countdown").innerText =
                 nextPrayerName + " için kalan süre: " +
