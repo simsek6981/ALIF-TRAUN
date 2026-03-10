@@ -12,8 +12,10 @@
             font-family: 'Segoe UI', Arial, sans-serif;
             background: white;
             color: black;
-            overflow: hidden;
 
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
         /* HEADER */
@@ -56,12 +58,12 @@
 
         /* CARDS */
         .card {
-            background: #f3f3f3;
-            padding: 30px;
+            background: #f5f5f5;
+            padding: 40px;
             border-radius: 20px;
             text-align: center;
-            font-size: 36px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            font-size: 54px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
             transition: all 0.4s ease;
         }
 
@@ -89,15 +91,20 @@
         }
 
         .time {
-            font-size: 66px;
+            .time {
+                font-size: clamp(50px, 8vw, 90px);
+
+            }
+
             margin-top: 10px;
-            font-weight: bold;
+            font-weight: 900;
         }
+
 
         /* COUNTDOWN */
         .countdown {
             text-align: center;
-            font-size: 42px;
+            font-size: 54px;
             margin-top: 20px;
             color: #0a7f3f;
             font-weight: bold;
@@ -230,8 +237,22 @@
             }
         }
 
+        /* TV Hochformat (vertikal) */
+        @media screen and (orientation: portrait) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* TV Querformat (horizontal) */
+        @media screen and (orientation: landscape) {
+            .container {
+                grid-template-columns: repeat(6, 1fr);
+            }
+        }
+
         /* FOOTER */
-        .footer {
+        /* .footer {
             position: absolute;
             bottom: 0;
             width: 100%;
@@ -239,10 +260,17 @@
             font-size: clamp(14px, 2vw, 18px);
             max-height: 200px;
             margin-top: 40px;
+        } */
+        .footer {
+            margin-top: auto;
+            text-align: center;
+            padding: 20px;
         }
 
-        img {
-            object-fit: contain;
+        .footer img {
+            max-width: 300px;
+            width: 20vw;
+            height: auto;
         }
     </style>
 </head>
@@ -281,10 +309,10 @@
         </div>
 
     </div>
-
+-->
     <div class="footer">
         <img src="Alif Traun Logo - LOGO Alif Traun Subesi.jpg" alt="">
-    </div> -->
+    </div>
 
     <script>
 
@@ -553,5 +581,3 @@
 </body>
 
 </html>
-
-
