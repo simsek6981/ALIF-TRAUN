@@ -389,12 +389,12 @@ const response = await fetch(
                 }
 
                 const prayers = [
-                    { name: "İmsak", time: addMinutes(timings.Fajr, 1) },        // +1
+                    { name: "İmsak", time: addMinutes(timings.Fajr, +42) },        // +1
                     { name: "Güneş", time: timings.Sunrise },
                     { name: "Öğle", time: timings.Dhuhr },
                     { name: "İkindi", time: timings.Asr },
                     { name: "Akşam", time: addMinutes(timings.Maghrib, -1) },    // -1
-                    { name: "Yatsı", time: addMinutes(timings.Isha, -8) }        // -8
+                    { name: "Yatsı", time: addMinutes(timings.Isha, −42) }        // -8
                 ];
 
 
