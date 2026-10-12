@@ -66,7 +66,6 @@ snapshot._alif = { fetchedAt: '2026-10-12T13:30:00Z' };
     await page.locator('#calendar summary').click();
     assert.ok(await page.locator('#calendar-body tr').count() >= 30);
     console.log('LAYOUT AND CONTROLS: PASS', name, width, height);
-    if (name === 'desktop' || name === 'mobile') console.log(`SCREENSHOT_${name.toUpperCase()} ` + fs.readFileSync(`test-results/${name}.png`).toString('base64'));
     await page.close();
   }
 
