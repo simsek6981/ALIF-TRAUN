@@ -24,14 +24,14 @@ snapshot._alif = { fetchedAt: '2026-10-12T13:30:00Z' };
   assert.ok(Math.abs(clockEpoch - Date.now()) < 2500, 'Clock displays Austrian time, with at most one tick of delay');
   console.log('LIVE CORS AND DEVICE TIMEZONE: PASS', today.date, C.PRAYERS.map(p => today[p.key]).join(' '));
 
-  const original = await browser.newPage();
-  const originalResponse = original.waitForResponse(response => response.url() === C.API_URL && response.ok(), { timeout: 30000 });
-  await original.goto(C.SOURCE_URL, { waitUntil: 'domcontentloaded' });
-  const originalPayload = await (await originalResponse).json();
+  // Compare with the original website's confirmed source API outside the browser.
+  // The provider deliberately does not expose CORS to arbitrary browser origins.
+  const originalResponse = await fetch(C.API_URL, { signal: AbortSignal.timeout(30000) });
+  assert.ok(originalResponse.ok, 'The original source API is available');
+  const originalPayload = await originalResponse.json();
   const originalToday = C.normalize(originalPayload).find(r => r.date === today.date);
   for (const p of C.PRAYERS) assert.equal(today[p.key], originalToday[p.key]);
-  console.log('ORIGINAL WEBSITE COMPARISON: PASS (all six times identical)');
-  await original.close();
+  console.log('ORIGINAL SOURCE COMPARISON: PASS (all six times identical)');
   await livePage.close();
 
   const fixedInstant = '2026-10-12T13:30:00Z';

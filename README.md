@@ -36,4 +36,4 @@ python -m http.server 8000
 node --test tests/prayer-core.test.cjs
 ```
 
-Dann `http://localhost:8000` öffnen. Die Tests prüfen Quellentreue, fehlerhafte Daten, Gebetswechsel, Tageswechsel und beide Sommer-/Winterzeitwechsel. GitHub Actions prüft zusätzlich die Browserdarstellung, die Live-Datenquelle und die Übereinstimmung mit der Originalseite.
+Dann `http://localhost:8000` öffnen. Die Tests prüfen Quellentreue, fehlerhafte Daten, Gebetswechsel, Tageswechsel und beide Sommer-/Winterzeitwechsel. GitHub Actions prüft zusätzlich die Browserdarstellung, die Live-Datenquelle und die Übereinstimmung mit der Datenquelle der Originalseite.
