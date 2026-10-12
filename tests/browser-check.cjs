@@ -8,7 +8,12 @@ const snapshot = require('../data/linz.json');
   const browser = await chromium.launch({ headless: true });
   const livePage = await browser.newPage({ timezoneId: 'America/New_York' });
   const errors = [];
+  livePage.on('console', message => { if (message.type() === 'error' || message.type() === 'warning') console.log('BROWSER CONSOLE', message.text()); });
+  livePage.on('requestfailed', request => console.log('BROWSER REQUEST FAILED', request.url(), request.failure()?.errorText));
+  livePage.on('response', response => { if (response.url().includes('nv-api')) console.log('BROWSER API RESPONSE', response.status(), response.headers()); });
   livePage.on('pageerror', error => errors.push(error.message));
+  const probe = await fetch(C.API_URL, { headers: { Origin: 'https://simsek6981.github.io' } });
+  console.log('API HTTP AND CORS', probe.status, probe.headers.get('access-control-allow-origin'));
   // This request is made by the browser from the site's origin: validates CORS too.
   const responsePromise = livePage.waitForResponse(response => response.url() === C.API_URL && response.ok(), { timeout: 30000 });
   await livePage.goto('http://127.0.0.1:8000');
