@@ -1,0 +1,35 @@
+name: Check prayer times and display
+on:
+  push:
+    branches: [main, codex/prayer-times-refresh]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - name: Check time logic
+        run: |
+          node --check app.js
+          node --check prayer-core.js
+          TZ=Pacific/Honolulu node --test tests/prayer-core.test.cjs
+      - name: Install browser test tools
+        run: |
+          npm install --no-save --package-lock=false playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Start local preview
+        run: python3 -m http.server 8000 --bind 127.0.0.1 > /tmp/alif-preview.log 2>&1 &
+      - name: Verify live source and browser layouts
+        run: node tests/browser-check.cjs
+      - name: Save display screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: display-screenshots
+          path: test-results/
+          if-no-files-found: ignore
