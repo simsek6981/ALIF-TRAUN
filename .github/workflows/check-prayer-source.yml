@@ -1,0 +1,12 @@
+name: Check prayer source
+on:
+  push:
+    branches: [codex/prayer-times-refresh]
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 inspect_source.py
