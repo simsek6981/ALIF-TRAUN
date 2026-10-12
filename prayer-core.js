@@ -3,13 +3,14 @@
   const TIME_ZONE = 'Europe/Vienna';
   const SOURCE_URL = 'https://namazvakitleri.com.tr/sehir/1480/linz-namaz-vakitleri';
   const API_URL = 'https://nv-api.com/getTimes/1480';
+  const DATA_URL = 'https://raw.githubusercontent.com/simsek6981/ALIF-TRAUN/prayer-data/data/linz.json';
   const PRAYERS = [
-    { key: 'imsak', name: 'Imsak', de: 'Morgend�mmerung' },
-    { key: 'gunes', name: 'G�nes', de: 'Sonnenaufgang', sunrise: true },
-    { key: 'ogle', name: '�gle', de: 'Mittagsgebet' },
-    { key: 'ikindi', name: 'Ikindi', de: 'Nachmittagsgebet' },
-    { key: 'aksam', name: 'Aksam', de: 'Abendgebet' },
-    { key: 'yatsi', name: 'Yats�', de: 'Nachtgebet' }
+    { key: 'imsak', name: 'İmsak', de: 'Morgendämmerung' },
+    { key: 'gunes', name: 'Güneş', de: 'Sonnenaufgang', sunrise: true },
+    { key: 'ogle', name: 'Öğle', de: 'Mittagsgebet' },
+    { key: 'ikindi', name: 'İkindi', de: 'Nachmittagsgebet' },
+    { key: 'aksam', name: 'Akşam', de: 'Abendgebet' },
+    { key: 'yatsi', name: 'Yatsı', de: 'Nachtgebet' }
   ];
   const partsFormatter = new Intl.DateTimeFormat('en-GB', {
     timeZone: TIME_ZONE, year: 'numeric', month: '2-digit', day: '2-digit',
@@ -96,7 +97,7 @@
     const total = Math.max(0, Math.ceil(milliseconds / 1000));
     return [Math.floor(total / 3600), Math.floor(total / 60) % 60, total % 60].map(v => String(v).padStart(2, '0')).join(':');
   }
-  const api = { TIME_ZONE, SOURCE_URL, API_URL, PRAYERS, parts, dateKey, normalize, epoch, nextPrayer, recentPrayer, countdown };
+  const api = { TIME_ZONE, SOURCE_URL, API_URL, DATA_URL, PRAYERS, parts, dateKey, normalize, epoch, nextPrayer, recentPrayer, countdown };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.PrayerCore = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

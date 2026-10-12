@@ -3,25 +3,21 @@ const fs = require('node:fs');
 const { chromium } = require('playwright');
 const C = require('../prayer-core.js');
 const snapshot = require('../data/linz.json');
+snapshot._alif = { fetchedAt: '2026-10-12T13:30:00Z' };
 
 (async () => {
   const browser = await chromium.launch({ headless: true });
   const livePage = await browser.newPage({ timezoneId: 'America/New_York' });
   const errors = [];
-  livePage.on('console', message => { if (message.type() === 'error' || message.type() === 'warning') console.log('BROWSER CONSOLE', message.text()); });
-  livePage.on('requestfailed', request => console.log('BROWSER REQUEST FAILED', request.url(), request.failure()?.errorText));
-  livePage.on('response', response => { if (response.url().includes('nv-api')) console.log('BROWSER API RESPONSE', response.status(), response.headers()); });
   livePage.on('pageerror', error => errors.push(error.message));
-  const probe = await fetch(C.API_URL, { headers: { Origin: 'https://simsek6981.github.io' } });
-  console.log('API HTTP AND CORS', probe.status, probe.headers.get('access-control-allow-origin'));
-  // This request is made by the browser from the site's origin: validates CORS too.
-  const responsePromise = livePage.waitForResponse(response => response.url() === C.API_URL && response.ok(), { timeout: 30000 });
+  // The source API forbids third-party browser origins; the data branch is CORS-compatible.
+  const responsePromise = livePage.waitForResponse(response => response.url() === C.DATA_URL && response.ok(), { timeout: 30000 });
   await livePage.goto('http://127.0.0.1:8000');
   const livePayload = await (await responsePromise).json();
   const liveRows = C.normalize(livePayload);
   const today = liveRows.find(r => r.date === C.dateKey());
   assert.ok(today, 'Live source contains the current Austrian day');
-  await livePage.waitForFunction(() => document.querySelector('#data-status').textContent.includes('Kaynak g�ncel'));
+  await livePage.waitForFunction(() => document.querySelector('#data-status').textContent.includes('Quellenstand'));
   assert.deepEqual(await livePage.locator('.prayer-time').allTextContents(), C.PRAYERS.map(p => today[p.key]));
   const displayedClock = await livePage.locator('#clock').innerText();
   const clockEpoch = C.epoch(today.date, displayedClock.slice(0, 5)) + Number(displayedClock.slice(-2)) * 1000;
@@ -50,13 +46,13 @@ const snapshot = require('../data/linz.json');
         static now() { return new NativeDate(instant).getTime(); }
       };
     }, fixedInstant);
-    await page.route(C.API_URL, route => route.fulfill({ json: snapshot }));
+    await page.route(C.DATA_URL, route => route.fulfill({ json: snapshot }));
     await page.goto('http://127.0.0.1:8000');
-    await page.waitForFunction(() => document.querySelector('#data-status').textContent.includes('Kaynak g�ncel'));
-    assert.equal(await page.locator('#next-name').innerText(), 'Ikindi');
+    await page.waitForFunction(() => document.querySelector('#data-status').textContent.includes('Quellenstand'));
+    assert.equal(await page.locator('#next-name').innerText(), 'İkindi');
     assert.equal(await page.locator('#countdown').innerText(), '00:21:00');
     assert.equal(await page.locator('.prayer-card.next').count(), 1);
-    assert.equal(await page.locator('.prayer-card.next .prayer-name').innerText(), 'Ikindi');
+    assert.equal(await page.locator('.prayer-card.next .prayer-name').innerText(), 'İkindi');
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, `${name}: no page overflow`);
     const cards = await page.locator('.prayer-card').evaluateAll(items => items.map(el => {
       const card = el.getBoundingClientRect(); const time = el.querySelector('.prayer-time').getBoundingClientRect();
@@ -82,9 +78,9 @@ const snapshot = require('../data/linz.json');
       static now() { return new NativeDate(instant).getTime(); }
     };
   }, fixedInstant);
-  await fallback.route(C.API_URL, route => route.abort());
+  await fallback.route(C.DATA_URL, route => route.abort());
   await fallback.goto('http://127.0.0.1:8000');
-  await fallback.waitForFunction(() => document.querySelector('#data-status').textContent.includes('kaydedilmis'));
+  await fallback.waitForFunction(() => document.querySelector('#data-status').textContent.includes('kaydedilmiş'));
   assert.equal(await fallback.locator('.prayer-time').first().innerText(), '05:33');
   console.log('SOURCE OUTAGE FALLBACK: PASS');
   await fallback.close();
@@ -97,9 +93,9 @@ const snapshot = require('../data/linz.json');
       static now() { return new NativeDate('2030-01-01T13:00:00Z').getTime(); }
     };
   });
-  await expired.route(C.API_URL, route => route.abort());
+  await expired.route(C.DATA_URL, route => route.abort());
   await expired.goto('http://127.0.0.1:8000');
-  await expired.waitForFunction(() => document.querySelector('#data-status').textContent.includes('G�ncel vakitler y�klenemedi'));
+  await expired.waitForFunction(() => document.querySelector('#data-status').textContent.includes('Güncel vakitler yüklenemedi'));
   assert.deepEqual(await expired.locator('.prayer-time').allTextContents(), Array(6).fill('--:--'));
   assert.equal(await expired.locator('#countdown').innerText(), '--:--:--');
   console.log('EXPIRED DATA REJECTION: PASS');

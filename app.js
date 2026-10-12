@@ -12,7 +12,7 @@
   let lastHighlight = '';
   const dateFormatter = new Intl.DateTimeFormat('tr-TR', { timeZone: C.TIME_ZONE, weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
   const shortDateFormatter = new Intl.DateTimeFormat('de-AT', { timeZone: C.TIME_ZONE, day: '2-digit', month: '2-digit', year: 'numeric' });
-  const hijriMonths = ['Muharrem', 'Safer', 'Rebi�levvel', 'Rebi�lahir', 'Cemaziyelevvel', 'Cemaziyelahir', 'Recep', 'Saban', 'Ramazan', 'Sevval', 'Zilkade', 'Zilhicce'];
+  const hijriMonths = ['Muharrem', 'Safer', 'Rebiülevvel', 'Rebiülahir', 'Cemaziyelevvel', 'Cemaziyelahir', 'Recep', 'Şaban', 'Ramazan', 'Şevval', 'Zilkade', 'Zilhicce'];
 
   function storageGet(key) { try { return localStorage.getItem(key); } catch { return null; } }
   function storageSet(key, value) { try { localStorage.setItem(key, value); } catch { /* Display still works when storage is unavailable. */ } }
@@ -60,7 +60,7 @@
         if (row) time.dateTime = new Date(C.epoch(today, row[prayer.key])).toISOString();
         const label = document.createElement('span');
         label.className = 'prayer-label';
-        label.textContent = prayer.sunrise ? 'G�nes dogusu / Sonnenaufgang' : '';
+        label.textContent = prayer.sunrise ? 'Güneş doğuşu / Sonnenaufgang' : '';
         card.append(name, de, time, label);
         $('times').append(card);
       });
@@ -74,8 +74,8 @@
     }
     const next = row ? C.nextPrayer(rows, now) : null;
     const recent = row ? C.recentPrayer(rows, now) : null;
-    $('next-name').textContent = recent ? `${recent.name} vakti baslad�` : next ? next.name : 'Vakitler bekleniyor';
-    $('next-detail').textContent = next ? `${next.date === today ? 'Bug�n / Heute' : 'Yar�n / Morgen'} � ${next.time} � ${next.de}` : 'G�ncel vakitleri kaynaktan kontrol edin / Bitte Originalquelle pr�fen.';
+    $('next-name').textContent = recent ? `${recent.name} vakti başladı` : next ? next.name : 'Vakitler bekleniyor';
+    $('next-detail').textContent = next ? `${next.date === today ? 'Bugün / Heute' : 'Yarın / Morgen'} · ${next.time} · ${next.de}` : 'Güncel vakitleri kaynaktan kontrol edin / Bitte Originalquelle prüfen.';
     $('countdown').textContent = next ? C.countdown(next.at - now.getTime()) : '--:--:--';
     const highlight = `${next?.date}:${next?.key}:${recent?.key}`;
     if (highlight !== lastHighlight) {
@@ -84,7 +84,7 @@
         card.classList.toggle('next', active);
         if (active) card.setAttribute('aria-current', 'true'); else card.removeAttribute('aria-current');
         const prayer = C.PRAYERS.find(p => p.key === card.dataset.key);
-        card.querySelector('.prayer-label').textContent = active ? 'Sonraki / Als N�chstes' : prayer.sunrise ? 'G�nes dogusu / Sonnenaufgang' : '';
+        card.querySelector('.prayer-label').textContent = active ? 'Sonraki / Als Nächstes' : prayer.sunrise ? 'Güneş doğuşu / Sonnenaufgang' : '';
       });
       lastHighlight = highlight;
     }
@@ -104,24 +104,30 @@
       if (row.date === today) tr.className = 'today';
       const dateCell = document.createElement('th');
       dateCell.scope = 'row';
-      dateCell.textContent = shortDateFormatter.format(new Date(`${row.date}T12:00:00Z`)) + (row.date === today ? ' � Bug�n / Heute' : '');
+      dateCell.textContent = shortDateFormatter.format(new Date(`${row.date}T12:00:00Z`)) + (row.date === today ? ' · Bugün / Heute' : '');
       tr.append(dateCell);
       C.PRAYERS.forEach(prayer => { const td = document.createElement('td'); td.textContent = row[prayer.key]; tr.append(td); });
       $('calendar-body').append(tr);
     });
-    $('calendar-range').textContent = available.length ? `${shortDateFormatter.format(new Date(`${available[0].date}T12:00:00Z`))} - ${shortDateFormatter.format(new Date(`${available.at(-1).date}T12:00:00Z`))} � ${available.length} g�n / Tage` : 'G�ncel takvim bulunamad� / Kein aktueller Kalender verf�gbar.';
+    $('calendar-range').textContent = available.length ? `${shortDateFormatter.format(new Date(`${available[0].date}T12:00:00Z`))} – ${shortDateFormatter.format(new Date(`${available.at(-1).date}T12:00:00Z`))} · ${available.length} gün / Tage` : 'Güncel takvim bulunamadı / Kein aktueller Kalender verfügbar.';
   }
   async function load() {
     if (inFlight) return;
     inFlight = true;
     lastAttempt = Date.now();
     $('refresh-button').disabled = true;
-    status('Kaynak kontrol ediliyor / Quelle wird gepr�ft.');
+    status('Kaynak kontrol ediliyor / Quelle wird geprüft…');
     try {
-      const data = await fetchJSON(C.API_URL);
+      // The original API only permits its own website as a browser origin.
+      // GitHub publishes unchanged source data collected by the hourly workflow.
+      const data = await fetchJSON(C.DATA_URL);
       accept(data);
       storageSet(CACHE_KEY, JSON.stringify({ payload: data, checkedAt: new Date().toISOString() }));
-      status(`Kaynak g�ncel � Son kontrol ${clockTime(new Date())} / Quelle aktualisiert � Linz`);
+      const sourceCheck = new Date(data._alif?.fetchedAt || '');
+      const hasCheck = Number.isFinite(sourceCheck.getTime());
+      const stale = !hasCheck || Date.now() - sourceCheck.getTime() > 6 * 60 * 60 * 1000;
+      const checked = hasCheck ? `${shortDateFormatter.format(sourceCheck)} ${clockTime(sourceCheck)}` : '—';
+      status(`${stale ? 'Kaydedilmiş kaynak verisi / Gespeicherte Quelldaten' : 'Linz vakitleri güncel / Linzer Zeiten aktuell'} · Kaynak kontrolü / Quellenstand: ${checked}`, stale);
     } catch (error) {
       if (!rows.some(row => row.date === C.dateKey())) {
         try {
@@ -130,12 +136,12 @@
         } catch { /* Missing or expired snapshots never supply guessed prayer times. */ }
       }
       if (rows.some(row => row.date === C.dateKey())) {
-        status('Kaynaga ulas�lamad�; kaydedilmis Linz vakitleri g�steriliyor. / Quelle nicht erreichbar; gespeicherte Linzer Zeiten werden angezeigt.', true);
+        status('Kaynağa ulaşılamadı; kaydedilmiş Linz vakitleri gösteriliyor. / Quelle nicht erreichbar; gespeicherte Linzer Zeiten werden angezeigt.', true);
       } else {
         rows = [];
         displayedDate = '';
         render(new Date());
-        status('G�ncel vakitler y�klenemedi. Kaynak baglant�s�n� a��n veya yeniden deneyin. / Aktuelle Zeiten fehlen. Bitte Originalquelle �ffnen oder erneut versuchen.', true);
+        status('Güncel vakitler yüklenemedi. Kaynak bağlantısını açın veya yeniden deneyin. / Aktuelle Zeiten fehlen. Bitte Originalquelle öffnen oder erneut versuchen.', true);
       }
       console.warn('Linz prayer time refresh failed:', error.message);
     } finally {
@@ -173,7 +179,7 @@
     try {
       if (document.fullscreenElement) await document.exitFullscreen();
       else await document.documentElement.requestFullscreen();
-    } catch { status('Tam ekran kullan�lam�yor / Vollbild ist in diesem Browser nicht verf�gbar.', true); }
+    } catch { status('Tam ekran kullanılamıyor / Vollbild ist in diesem Browser nicht verfügbar.', true); }
   });
   document.addEventListener('fullscreenchange', () => $('fullscreen-toggle').setAttribute('aria-pressed', String(Boolean(document.fullscreenElement))));
   $('refresh-button').addEventListener('click', load);

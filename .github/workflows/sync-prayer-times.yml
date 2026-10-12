@@ -1,0 +1,40 @@
+name: Update Linz prayer times
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+  push:
+    branches: [main, codex/prayer-times-refresh]
+    paths:
+      - scripts/sync-prayer-times.py
+      - .github/workflows/sync-prayer-times.yml
+permissions:
+  contents: write
+concurrency:
+  group: linz-prayer-data
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          path: source
+          persist-credentials: false
+      - uses: actions/checkout@v5
+        with:
+          ref: prayer-data
+          path: prayer-data
+      - name: Fetch and validate the original Linz times
+        run: python3 source/scripts/sync-prayer-times.py --output prayer-data/data/linz.json
+      - name: Publish source data
+        working-directory: prayer-data
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/linz.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Update unchanged Linz prayer times from original source'
+            git push origin HEAD:prayer-data
+          fi
