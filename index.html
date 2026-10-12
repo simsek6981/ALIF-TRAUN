@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#123e32">
+  <meta name="description" content="ALIF Traun: Linz için güncel namaz vakitleri, canlı saat ve sonraki namaza kalan süre. Gebetszeiten für Linz und Traun.">
+  <title>ALIF Traun · Namaz Vakitleri</title>
+  <link rel="icon" type="image/jpeg" href="Alif%20Traun%20Logo%20-%20LOGO%20Alif%20Traun%20Subesi.jpg">
+  <link rel="stylesheet" href="styles.css">
+  <script src="prayer-core.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#prayer-times">Vakitlere geç / Zu den Zeiten</a>
+  <header class="masthead">
+    <div class="header-inner">
+      <a class="brand" href="./" aria-label="ALIF Traun ana sayfa">
+        <img src="Alif%20Traun%20Logo%20-%20LOGO%20Alif%20Traun%20Subesi.jpg" alt="ALIF Traun" width="86" height="86">
+        <span><span class="eyebrow">ALIF TRAUN</span><span class="brand-title">Namaz Vakitleri</span><span class="brand-subtitle" lang="de">Gebetszeiten · Linz / Traun</span></span>
+      </a>
+      <div class="clock-block"><span class="eyebrow">AVUSTURYA SAATİ <span lang="de">/ Ortszeit Österreich</span></span><time id="clock">--:--<span class="seconds">:--</span></time></div>
+      <div class="controls">
+        <button id="theme-toggle" class="icon-button" type="button" aria-label="Gece modu / Dunkelmodus" aria-pressed="false" title="Gece modu / Dunkelmodus"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.1A8.5 8.5 0 0 1 9.9 3.5a8.5 8.5 0 1 0 10.6 10.6Z"/></svg></button>
+        <button id="fullscreen-toggle" class="icon-button" type="button" aria-label="Tam ekran / Vollbild" aria-pressed="false" title="Tam ekran / Vollbild"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m8 0h5v-5"/></svg></button>
+      </div>
+    </div>
+  </header>
+  <main class="page">
+    <section class="date-row" aria-label="Tarih / Datum">
+      <div><p class="eyebrow">BUGÜN <span lang="de">/ HEUTE</span></p><h1 id="miladi">Tarih yükleniyor…</h1><p id="hicri" class="muted"></p></div>
+      <div class="location-pill"><span class="status-dot" aria-hidden="true"></span>Linz, Avusturya</div>
+    </section>
+    <section class="next-panel" aria-label="Sonraki namaz / Nächstes Gebet">
+      <div class="next-description"><p class="eyebrow">SONRAKİ NAMAZ <span lang="de">/ NÄCHSTES GEBET</span></p><h2 id="next-name">Vakitler yükleniyor</h2><p id="next-detail" class="muted">Linz namaz vakitleri alınıyor…</p></div>
+      <div class="countdown-block"><p class="eyebrow">KALAN SÜRE <span lang="de">/ VERBLEIBEND</span></p><p id="countdown" class="countdown" role="timer" aria-label="Sonraki namaza kalan süre">--:--:--</p></div>
+      <div class="progress-track" aria-hidden="true"><div id="progress-bar"></div></div>
+    </section>
+    <section id="prayer-times" aria-labelledby="times-title">
+      <div class="section-heading"><h2 id="times-title">Günün vakitleri <span lang="de">/ Tageszeiten</span></h2><span class="small-note">Linz · Diyanet</span></div>
+      <div class="times-grid" id="times" aria-busy="true"></div>
+    </section>
+    <div class="status-row"><p id="data-status" role="status">Vakitler yükleniyor / Zeiten werden geladen…</p><button class="text-button" id="refresh-button" type="button">Yenile <span lang="de">/ Aktualisieren</span></button></div>
+    <details class="calendar" id="calendar">
+      <summary>Vakit takvimi <span lang="de">/ Gebetskalender</span><span class="calendar-arrow" aria-hidden="true">+</span></summary>
+      <p id="calendar-range" class="muted"></p>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Namaz vakitleri takvimi / Gebetskalender"><table><caption class="sr-only">Linz namaz vakitleri / Gebetszeiten Linz</caption><thead><tr><th scope="col">Tarih / Datum</th><th scope="col">İmsak</th><th scope="col">Güneş</th><th scope="col">Öğle</th><th scope="col">İkindi</th><th scope="col">Akşam</th><th scope="col">Yatsı</th></tr></thead><tbody id="calendar-body"></tbody></table></div>
+    </details>
+    <noscript><p class="notice">Namaz vakitlerini göstermek için JavaScript gereklidir. <span lang="de">Bitte aktiviere JavaScript oder öffne die Originalquelle.</span> <a href="https://namazvakitleri.com.tr/sehir/1480/linz-namaz-vakitleri">Linz namaz vakitleri ↗</a></p></noscript>
+  </main>
+  <footer class="page-footer"><div><strong>ALIF TRAUN</strong><span>Birlikte, aynı vakitte. <span lang="de">Gemeinsam zur Gebetszeit.</span></span></div><a href="https://namazvakitleri.com.tr/sehir/1480/linz-namaz-vakitleri" target="_blank" rel="noopener noreferrer">Kaynak / Quelle: namazvakitleri.com.tr ↗</a></footer>
+</body>
+</html>
