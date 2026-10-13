@@ -1,7 +1,7 @@
 name: Check prayer times and display
 on:
   push:
-    branches: [main, codex/prayer-times-refresh]
+    branches: [main, codex/prayer-times-refresh, codex/portrait-display]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -33,3 +33,4 @@ jobs:
           name: display-screenshots
           path: test-results/
           if-no-files-found: ignore
+          retention-days: 7
