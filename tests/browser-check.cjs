@@ -108,6 +108,17 @@ async function verifyGeometry(page, width, height, label) {
     assert.ok(await page.locator('#calendar-body tr').count() >= 30);
     await page.locator('#calendar-close').click();
     assert.equal(await page.locator('#calendar-panel').isVisible(), false);
+    if (name === 'portrait-1080') {
+      await page.locator('#fullscreen-toggle').click();
+      await page.waitForFunction(() => Boolean(document.fullscreenElement));
+      assert.equal(await page.locator('#fullscreen-toggle').getAttribute('aria-pressed'), 'true');
+      await page.locator('#fullscreen-toggle').click();
+      await page.waitForFunction(() => !document.fullscreenElement);
+      await page.locator('#calendar-toggle').click();
+      await page.keyboard.press('Escape');
+      assert.equal(await page.locator('#calendar-panel').isVisible(), false);
+      console.log('FULLSCREEN AND ESCAPE: PASS');
+    }
     await verifyGeometry(page, width, height, name + '-calendar-closed');
     console.log('LAYOUT, LIGHT-ONLY AND CALENDAR: PASS', name);
     await page.close();

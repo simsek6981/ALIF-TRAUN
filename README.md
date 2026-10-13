@@ -21,7 +21,21 @@ Der Anbieter blockiert Browseranfragen anderer Webseiten per CORS. Deshalb aktua
 
 ## Anzeige
 
-Türkische Bezeichnungen mit deutschen Erläuterungen, sechs Karten nebeneinander auf großen Querformat-Bildschirmen, eine Liste auf großen Hochformat-Bildschirmen und zwei Spalten auf dem Handy. Vollbild und Hell-/Dunkelmodus stehen oben rechts bereit. Der Kalender enthält die aktuell von der Quelle verfügbaren Tage.
+Sechs große Zeilen mit Namen links und sehr großen, gleichmäßig dunklen Uhrzeiten rechts. Ausschließlich heller Modus: weißer Hintergrund, dunkelblaue Schrift und eine zurückhaltende blaue Markierung für das nächste Gebet. Das Original-Logo bleibt unverändert und wird im natürlichen Seitenverhältnis 5:1 gezeigt.
+
+Das gesamte Display passt im normalen Betrieb in die Browserhöhe. Die Uhr und der Countdown stehen außerhalb der sechs Zeilen und sind deutlich kleiner. Sekunden sind zusätzlich verkleinert. Der Kalender öffnet sich über **Takvim** in einem separaten Dialog; er nimmt der Hauptanzeige keinen Platz weg. **Tam ekran** aktiviert den Vollbildmodus, sofern der Browser dies unterstützt. Auf älteren Browsern ohne native Dialogfunktion bleibt der Kalender über einen Dialog-Ersatz mit Escape- und Tastatursteuerung erreichbar.
+
+### Gemessene Hochformat-Darstellung
+
+Bei 1080 × 1920 Pixeln: sechs Zeilen von jeweils ungefähr 237 Pixeln Höhe, Zahlen mit ungefähr 225 Pixeln Schriftgröße, Original-Logo mit ungefähr 497 × 99 Pixeln. Alle sechs Zeiten bleiben gleichzeitig sichtbar. Schriftgrößen richten sich in aktuellen Browsern nach dem tatsächlich verfügbaren Platz der Zeile; ältere Browser erhalten eine an der Bildschirmgröße orientierte CSS-Alternative.
+
+Die Browserprüfung misst die Position jeder Zeile und Ziffernfläche, die tatsächlichen Schriftgrößen und die Dokumentabmessungen. Getestet werden 1080×1920, 720×1280, 768×1366, 2160×3840, 1920×1080 sowie Handygrößen. Screenshots liegen als **display-screenshots** beim entsprechenden Actions-Lauf. Die Aufnahmen verwenden reproduzierbare Testdaten vom 12.10.2026; im Betrieb wird immer der aktuelle Tag aus der bestehenden Quelle geladen.
+
+Eine physische Fernlesbarkeit aus 20 Metern kann ein Browser-Screenshot nicht garantieren. Bildschirmdiagonale, Montagehöhe, Helligkeit und Betrachtungswinkel müssen vor Ort geprüft werden. Das referenzierte Bildschirmfoto ließ sich während dieser Umsetzung nicht als Bild öffnen; die Prüfung erfolgte an den angegebenen Pixelauflösungen und den Original-Logo-Dateien.
+
+### Dauerbetrieb
+
+Die sechs Zeilen werden einmal angelegt. Unveränderte Uhrzeiten werden beim Sekundentakt nicht neu aufgebaut; Uhr und Countdown ändern nur betroffene Textknoten. Gebets-Timestamps werden beim Laden oder Tageswechsel berechnet, nicht ständig für den gesamten Kalender. Nach Netzwerkfehlern erfolgt ein automatischer neuer Versuch nach 30 Sekunden, mit zunehmendem Abstand bis maximal 15 Minuten. Ungültige oder für den aktuellen Tag fehlende Daten ergeben Platzhalter statt erfundener Zeiten. Die bestehende Zeitzonen- und Gebetszeitenlogik bleibt unverändert.
 
 ## GitHub Pages
 

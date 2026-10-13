@@ -34,7 +34,7 @@ h1 { font-size: clamp(20px, 4.8vw, 58px); line-height: 1.06; font-weight: 800; l
 .prayer-time { display: block; font-size: clamp(42px, min(22vw, 9vh), 260px); line-height: .94; font-weight: 900; letter-spacing: -.035em; white-space: nowrap; text-align: right; }
 /* Use the actual allocated row dimensions when the browser supports container units. */
 @supports (font-size: 1cqh) {
-  .prayer-time { font-size: min(106cqh, 24cqw, 280px); }
+  .prayer-time { font-size: min(106cqh, 24cqw); }
   .prayer-name { font-size: min(38cqh, 8cqw, 88px); }
 }
 .prayer-card.next { background: var(--next); border-left-color: var(--blue); }
