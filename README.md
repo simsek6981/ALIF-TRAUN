@@ -31,6 +31,10 @@ Bei 1080 × 1920 Pixeln: sechs Zeilen von jeweils ungefähr 237 Pixeln Höhe, Za
 
 Die Browserprüfung misst die Position jeder Zeile und Ziffernfläche, die tatsächlichen Schriftgrößen und die Dokumentabmessungen. Getestet werden 1080×1920, 720×1280, 768×1366, 2160×3840, 1920×1080 sowie Handygrößen. Screenshots liegen als **display-screenshots** beim entsprechenden Actions-Lauf. Die Aufnahmen verwenden reproduzierbare Testdaten vom 12.10.2026; im Betrieb wird immer der aktuelle Tag aus der bestehenden Quelle geladen.
 
+Bei 2160 × 3840 Pixeln wachsen die Zahlen auf ungefähr 484 Pixel, statt eine feste Obergrenze beizubehalten. Die native Auflösung des vorhandenen Logos beträgt 500 × 100 Pixel; es wird nicht künstlich vergrößert oder durch ein anderes Logo ersetzt.
+
+![Geprüfte Anzeige bei 1080 × 1920 Pixeln – reproduzierbare Testaufnahme](docs/display-1080x1920.png)
+
 Eine physische Fernlesbarkeit aus 20 Metern kann ein Browser-Screenshot nicht garantieren. Bildschirmdiagonale, Montagehöhe, Helligkeit und Betrachtungswinkel müssen vor Ort geprüft werden. Das referenzierte Bildschirmfoto ließ sich während dieser Umsetzung nicht als Bild öffnen; die Prüfung erfolgte an den angegebenen Pixelauflösungen und den Original-Logo-Dateien.
 
 ### Dauerbetrieb

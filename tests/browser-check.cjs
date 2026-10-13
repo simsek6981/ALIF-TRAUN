@@ -102,7 +102,6 @@ async function verifyGeometry(page, width, height, label) {
     assert.equal(await page.locator('.prayer-card.next').count(), 1);
     await verifyGeometry(page, width, height, name);
     await page.screenshot({ path: 'test-results/' + name + '.png', fullPage: false });
-    if (name === 'portrait-1080') console.log('SCREENSHOT_PORTRAIT ' + fs.readFileSync('test-results/' + name + '.png').toString('base64'));
     await page.locator('#calendar-toggle').click();
     assert.ok(await page.locator('#calendar-panel').isVisible());
     assert.ok(await page.locator('#calendar-body tr').count() >= 30);
