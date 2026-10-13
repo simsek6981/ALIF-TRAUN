@@ -218,6 +218,7 @@
         const exit = document.exitFullscreen || document.webkitExitFullscreen;
         if (exit) await exit.call(document);
       } else { await enterFull.call(document.documentElement); }
+      fullChanged();
     } catch { status('Tam ekran bu tarayıcıda açılamadı', 'Tarayıcının tam ekran seçeneğini kullanın.', true); }
   });
   function fullChanged() { full.setAttribute('aria-pressed', String(Boolean(document.fullscreenElement || document.webkitFullscreenElement))); }

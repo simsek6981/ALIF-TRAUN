@@ -109,10 +109,10 @@ async function verifyGeometry(page, width, height, label) {
     assert.equal(await page.locator('#calendar-panel').isVisible(), false);
     if (name === 'portrait-1080') {
       await page.locator('#fullscreen-toggle').click();
-      await page.waitForFunction(() => Boolean(document.fullscreenElement));
+      await page.waitForFunction(() => Boolean(document.fullscreenElement) && document.querySelector('#fullscreen-toggle').getAttribute('aria-pressed') === 'true');
       assert.equal(await page.locator('#fullscreen-toggle').getAttribute('aria-pressed'), 'true');
       await page.locator('#fullscreen-toggle').click();
-      await page.waitForFunction(() => !document.fullscreenElement);
+      await page.waitForFunction(() => !document.fullscreenElement && document.querySelector('#fullscreen-toggle').getAttribute('aria-pressed') === 'false');
       await page.locator('#calendar-toggle').click();
       await page.keyboard.press('Escape');
       assert.equal(await page.locator('#calendar-panel').isVisible(), false);
