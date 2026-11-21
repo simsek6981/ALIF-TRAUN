@@ -19,33 +19,33 @@ button:focus-visible, a:focus-visible, .table-scroll:focus-visible { outline: 3p
 .brand-logo { display: block; width: min(54vw, 560px); height: auto; aspect-ratio: 5 / 1; object-fit: contain; flex-shrink: 0; }
 h1 { font-size: clamp(20px, 4.8vw, 58px); line-height: 1.06; font-weight: 800; letter-spacing: -.025em; white-space: nowrap; }
 .date-row { margin-top: clamp(8px, 1vh, 20px); display: flex; justify-content: space-between; align-items: center; gap: 16px; }
-.date { font-size: clamp(13px, 2.7vw, 34px); line-height: 1.15; font-weight: 600; min-width: 0; }
+.date { font-size: clamp(13px, 3.2vw, 40px); line-height: 1.15; font-weight: 600; min-width: 0; }
 .location { color: var(--blue); }
 .date-divider { margin: 0 .35em; }
 .clock-block { display: flex; align-items: baseline; gap: .55em; white-space: nowrap; }
-.clock-label { font-size: clamp(12px, 2vw, 24px); color: var(--muted); }
-#clock { font-size: clamp(38px, 8.6vw, 110px); font-weight: 750; line-height: 1; letter-spacing: -.025em; }
+.clock-label { font-size: clamp(12px, 2.6vw, 30px); color: var(--muted); }
+#clock { font-size: clamp(44px, 11.5vw, 150px); font-weight: 750; line-height: 1; letter-spacing: -.025em; }
 .seconds { font-size: .48em; letter-spacing: 0; color: var(--muted); }
 .prayer-section { min-height: 0; min-width: 0; }
 .times-grid { height: 100%; display: grid; grid-template-rows: repeat(6, minmax(0, 1fr)); border-top: 3px solid var(--ink); border-bottom: 3px solid var(--ink); }
 .prayer-card { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; column-gap: clamp(8px, 2vw, 32px); min-width: 0; min-height: 0; padding: clamp(4px, .6vh, 14px) clamp(8px, 1.8vw, 28px); border-bottom: 2px solid var(--line); border-left: 6px solid transparent; container-type: size; }
 .prayer-card:last-child { border-bottom: 0; }
 .prayer-name { font-size: clamp(23px, min(7.5vw, 5vh), 100px); font-weight: 750; line-height: 1; }
-.prayer-time { display: block; font-size: clamp(36px, min(18.5vw, 7.6vh), 215px); line-height: .94; font-weight: 900; letter-spacing: -.035em; white-space: nowrap; text-align: right; }
+.prayer-time { display: block; font-size: clamp(32px, min(16vw, 6.6vh), 185px); line-height: .94; font-weight: 900; letter-spacing: -.035em; white-space: nowrap; text-align: right; }
 /* Use the actual allocated row dimensions when the browser supports container units. */
 @supports (font-size: 1cqh) {
-  .prayer-time { font-size: min(90cqh, 19.5cqw); }
+  .prayer-time { font-size: min(80cqh, 17cqw); }
   .prayer-name { font-size: min(45cqh, 9cqw, 100px); }
 }
 .prayer-card.next { background: var(--next); border-left-color: var(--blue); }
 .next-panel { display: flex; align-items: center; justify-content: space-between; gap: 2vw; padding: clamp(6px, .7vh, 16px) 1vw; min-width: 0; }
 .next-copy { min-width: 0; }
-.next-label, .countdown-label { color: var(--muted); font-size: clamp(12px, 2.4vw, 28px); line-height: 1.1; font-weight: 600; }
-#next-name { font-size: clamp(26px, 5.2vw, 66px); font-weight: 800; line-height: 1.15; margin-top: .08em; }
-#next-detail { font-size: clamp(12px, 2.3vw, 28px); color: var(--muted); margin-top: .16em; line-height: 1.15; }
+.next-label, .countdown-label { color: var(--muted); font-size: clamp(12px, 2.8vw, 34px); line-height: 1.1; font-weight: 600; }
+#next-name { font-size: clamp(28px, 6.5vw, 84px); font-weight: 800; line-height: 1.15; margin-top: .08em; }
+#next-detail { font-size: clamp(12px, 2.8vw, 34px); color: var(--muted); margin-top: .16em; line-height: 1.15; }
 .countdown-block { text-align: right; flex-shrink: 0; }
 .countdown-label { display: block; margin-bottom: .2em; }
-#countdown { display: block; font-size: clamp(42px, 9vw, 116px); font-weight: 800; line-height: 1; letter-spacing: -.035em; white-space: nowrap; }
+#countdown { display: block; font-size: clamp(48px, 12vw, 156px); font-weight: 800; line-height: 1; letter-spacing: -.035em; white-space: nowrap; }
 .display-footer { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-width: 0; font-size: clamp(11px, 1.8vw, 22px); line-height: 1.1; }
 #display-status { color: var(--muted); min-width: 0; }
 #display-status:empty { visibility: hidden; }
@@ -75,16 +75,16 @@ tr.today { background: var(--next); font-weight: 700; }
   .display-shell { gap: 8px; } .brand-logo { width: 56vw; } h1 { font-size: 4.8vw; }
   .prayer-card { border-left-width: 4px; padding-left: 8px; padding-right: 8px; }
   .next-label, .countdown-label { font-size: 12px; } #next-name { font-size: clamp(23px, 6vw, 34px); }
-  #next-detail { font-size: 12px; } #countdown { font-size: clamp(36px, 9.5vw, 52px); }
+  #next-detail { font-size: 12px; } #countdown { font-size: clamp(40px, 11vw, 60px); }
   .display-footer { font-size: 11px; } .controls { gap: 6px; }
 }
 @media (orientation: landscape) {
   .brand-logo { width: min(40vw, 560px); } h1 { font-size: clamp(22px, 4vh, 52px); }
   .date-row { margin-top: .7vh; } .date { font-size: clamp(13px, 2.4vh, 30px); }
-  #clock { font-size: clamp(36px, 6.6vh, 86px); } .clock-label { font-size: clamp(12px, 1.7vh, 20px); }
+  #clock { font-size: clamp(40px, 8.5vh, 110px); } .clock-label { font-size: clamp(12px, 1.7vh, 20px); }
   .next-label, .countdown-label { font-size: clamp(11px, 2vh, 24px); }
   #next-name { font-size: clamp(22px, 4vh, 48px); } #next-detail { font-size: clamp(11px, 2vh, 24px); }
-  #countdown { font-size: clamp(36px, 6.6vh, 86px); } .display-footer { font-size: clamp(11px, 1.7vh, 20px); }
+  #countdown { font-size: clamp(40px, 8.5vh, 110px); } .display-footer { font-size: clamp(11px, 1.7vh, 20px); }
 }
 @media (max-height: 500px) {
   .display-shell { --edge: 8px; gap: 3px; } .brand-logo { width: min(31vw, 290px); }
