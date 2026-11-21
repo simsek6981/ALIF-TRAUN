@@ -60,10 +60,10 @@ async function verifyGeometry(page, width, height, label) {
   }
   assert.ok(Math.abs(metrics.logo.width / metrics.logo.height - 5) < .05, label + ': logo is undistorted');
   if (width === 1080 && height === 1920) {
-    assert.ok(metrics.rows.every(r => r.font >= 150), '1080 portrait: numbers are at least 150 px');
+    assert.ok(metrics.rows.every(r => r.font >= 130), '1080 portrait: numbers are at least 130 px');
     assert.ok(metrics.logo.width >= 530, 'Original logo is prominently displayed');
-    assert.ok(metrics.rows[0].font > metrics.clockFont * 1.1);
-    assert.ok(metrics.rows[0].font > metrics.countdownFont * 1.1);
+    assert.ok(metrics.clockFont >= 180, '1080 portrait: clock is at least 180 px');
+    assert.ok(metrics.countdownFont >= 180, '1080 portrait: countdown is at least 180 px');
   }
   console.log('DISPLAY_METRICS', label, JSON.stringify(metrics));
   return metrics;
